@@ -6,7 +6,7 @@
 /*   By: mgodawat <mgodawat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:35:09 by mgodawat          #+#    #+#             */
-/*   Updated: 2024/07/11 11:53:06 by mgodawat         ###   ########.fr       */
+/*   Updated: 2024/07/15 11:58:45 by mgodawat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,21 @@ int	main(void)
 {
 	int		fd;
 	char	*line;
+	int		lines;
 
+	lines = 1;
 	fd = open("example.txt", O_RDONLY);
 	if (fd == -1)
 	{
-		perror("Error opening file");
-		return (EXIT_FAILURE);
+		perror("open");
+		return (1);
 	}
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
-		printf("%s", line);
+		printf("%d -->  %s", lines++, line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
