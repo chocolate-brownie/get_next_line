@@ -6,7 +6,7 @@
 /*   By: mgodawat <mgodawat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:35:09 by mgodawat          #+#    #+#             */
-/*   Updated: 2024/07/15 11:58:45 by mgodawat         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:49:00 by mgodawat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(void)
 	int		lines;
 
 	lines = 1;
-	fd = open("example.txt", O_RDONLY);
+	fd = open("file1.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		perror("open");

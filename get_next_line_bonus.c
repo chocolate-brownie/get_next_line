@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgodawat <mgodawat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 10:11:30 by mgodawat          #+#    #+#             */
-/*   Updated: 2024/07/15 15:29:57 by mgodawat         ###   ########.fr       */
+/*   Created: 2024/07/15 16:14:40 by mgodawat          #+#    #+#             */
+/*   Updated: 2024/07/16 10:44:57 by mgodawat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	update_and_clean(t_list **list)
 {
@@ -54,7 +54,7 @@ char	*get_line_from_list(t_list *list)
 	return (next_line);
 }
 
-void	append_node(t_list **list, char *buf)
+void	append_node(t_list **list, char *buf, int fd)
 {
 	t_list	*new_node;
 	t_list	*last_node;
@@ -65,9 +65,9 @@ void	append_node(t_list **list, char *buf)
 		free(buf);
 		return ;
 	}
-	last_node = find_last_node(*list);
+	last_node = find_last_node(list[fd]);
 	if (!last_node)
-		*list = new_node;
+		list[fd] = new_node;
 	else
 		last_node->next = new_node;
 	new_node->str_buf = buf;
@@ -79,7 +79,7 @@ void	create_list(t_list **list, int fd)
 	int		char_read;
 	char	*buffer;
 
-	while (!found_newline(*list))
+	while (!found_newline(list[fd]))
 	{
 		buffer = (char *)malloc(BUFFER_SIZE + 1);
 		if (!buffer)
@@ -96,28 +96,34 @@ void	create_list(t_list **list, int fd)
 			break ;
 		}
 		buffer[char_read] = '\0';
-		append_node(list, buffer);
+		append_node(list, buffer, fd);
 	}
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list = NULL;
+	static t_list	*list[1024];
 	char			*next_line;
+	t_list			*temp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 	{
-		if (list)
+		if (list[fd])
 		{
-			free_nodes(&list, NULL, NULL);
-			list = NULL;
+			while (list[fd] != NULL)
+			{
+				temp = list[fd]->next;
+				free(list[fd]->str_buf);
+				free(list[fd]);
+				list[fd] = temp;
+			}
 		}
 		return (NULL);
 	}
-	create_list(&list, fd);
-	if (!list)
+	create_list(list, fd);
+	if (list[fd] == NULL)
 		return (NULL);
-	next_line = get_line_from_list(list);
-	update_and_clean(&list);
+	next_line = get_line_from_list(list[fd]);
+	update_and_clean(&list[fd]);
 	return (next_line);
 }

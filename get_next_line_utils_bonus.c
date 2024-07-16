@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgodawat <mgodawat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 10:11:20 by mgodawat          #+#    #+#             */
-/*   Updated: 2024/07/15 15:31:24 by mgodawat         ###   ########.fr       */
+/*   Created: 2024/07/15 16:15:09 by mgodawat          #+#    #+#             */
+/*   Updated: 2024/07/15 16:34:54 by mgodawat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	strlen_newline(t_list *list)
 {
@@ -73,7 +73,7 @@ int	found_newline(t_list *list)
 		{
 			if (list->str_buf[i] == '\n')
 				return (1);
-			i++;
+			++i;
 		}
 		list = list->next;
 	}
